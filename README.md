@@ -1,1 +1,3 @@
 # gateware
+
+TX, RX
