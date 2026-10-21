@@ -161,16 +161,33 @@ begin
             report "FAIL: Header bit mismatch at index "
                    & integer'image(i)
             severity error;
-
+    end loop;
+    
     --------------------------- Test 5: Verify the payload   ------------------------------------
     
+    
+    for  i in  7  downto 0 loop
+        wait until falling_edge(clk_tb);
+        wait for 1 ns;
+
+        assert transmissionWireOutput_tb = payloadData_tb(i)
+            report "FAIL: Payload bit mismatch at index "
+                   & integer'image(i)
+            severity error;
     
     end loop;
 
     report "PASS: All 32 header bits verified";
     
-   
-   
+   -- TEST 5B: Check that no extra payload byte is requested
+
+    assert nextBytePayloadData_tb = '0'
+        report "FAIL: Extra payload byte requested!"
+        severity error;
+    
+    report "PASS: Payload length verified";
+    
+       
     wait;
     
     end process stimuli;
